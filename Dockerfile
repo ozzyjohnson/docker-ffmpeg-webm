@@ -1,20 +1,27 @@
-# -BEGIN- Standard Head for Caching
-
-FROM phusion/baseimage:latest
+FROM debian:jessie
 
 MAINTAINER Ozzy Johnson <ozzy.johnson@gmail.com>
  
-RUN apt-get -y -qq update 
-RUN apt-get -y -qq upgrade
-
+RUN apt-get -y update && apt-get install -y \
+    git-core \
+    autoconf \
+    automake \
+    build-essential \
+    libass-dev \
+    libgpac-dev \
+    libtheora-dev \
+    libtool \
+    libvorbis-dev \
+    pkg-config \
+    texi2html \
+    zlib1g-dev \
+    libmp3lame-dev
+ 
 # Avoid those ugly Dialog errors from debconf.
 ENV DEBIAN_FRONTEND noninteractive
 
-# -END- Standard Head for Caching
 
-RUN apt-get install -y -qq git autoconf automake build-essential libass-dev libgpac-dev libtheora-dev libtool libvorbis-dev pkg-config texi2html zlib1g-dev libmp3lame-dev
-
-#Cloning
+# CLONING:
 
 WORKDIR /tmp
 
@@ -25,7 +32,7 @@ RUN git clone https://chromium.googlesource.com/webm/libvpx.git
 RUN git clone git://source.ffmpeg.org/ffmpeg.git
 RUN git clone git://git.opus-codec.org/opus.git
 
-#Compiling
+# COMPILING:
 
 ## Yasm
 
