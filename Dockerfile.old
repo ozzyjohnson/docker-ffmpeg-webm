@@ -1,0 +1,81 @@
+# -BEGIN- Standard Head for Caching
+
+FROM phusion/baseimage:latest
+
+MAINTAINER Ozzy Johnson <ozzy.johnson@gmail.com>
+ 
+RUN apt-get -y -qq update 
+RUN apt-get -y -qq upgrade
+
+# Avoid those ugly Dialog errors from debconf.
+ENV DEBIAN_FRONTEND noninteractive
+
+# -END- Standard Head for Caching
+
+RUN apt-get install -y -qq git autoconf automake build-essential libass-dev libgpac-dev libsdl1.2-dev libtheora-dev libtool libva-dev libvdpau-dev libvorbis-dev libx11-dev libxext-dev libxfixes-dev pkg-config texi2html zlib1g-dev libmp3lame-dev
+
+#Cloning
+
+WORKDIR /tmp
+
+RUN git clone git://github.com/yasm/yasm.git
+RUN git clone git://github.com/FFmpeg/FFmpeg.git
+RUN git clone git://github.com/mstorsjo/fdk-aac.git
+RUN git clone git://git.videolan.org/x264.git
+RUN git clone https://chromium.googlesource.com/webm/libvpx.git
+RUN git clone git://source.ffmpeg.org/ffmpeg.git
+RUN git clone git://git.opus-codec.org/opus.git
+
+#Compiling
+
+## Yasm
+
+WORKDIR /tmp/yasm
+RUN ./autogen.sh
+RUN ./configure
+RUN make -j`getconf _NPROCESSORS_ONLN`
+RUN make install
+RUN make distclean
+
+## x264
+
+WORKDIR /tmp/x264
+RUN ./configure --enable-static
+RUN make -j`getconf _NPROCESSORS_ONLN`
+RUN make install
+RUN make distclean
+
+## fdk-aac
+
+WORKDIR /tmp/fdk-aac
+RUN autoreconf -fiv
+RUN ./configure --disable-shared
+RUN make -j`getconf _NPROCESSORS_ONLN`
+RUN make install
+RUN make distclean
+
+## libopus
+
+WORKDIR /tmp/opus
+RUN ./autogen.sh
+RUN ./configure --disable-shared
+RUN make -j`getconf _NPROCESSORS_ONLN`
+RUN make install
+RUN make distclean
+
+## libvpx
+
+WORKDIR /tmp/libvpx
+RUN ./configure --disable-shared
+RUN make -j`getconf _NPROCESSORS_ONLN`
+RUN make install
+RUN make clean
+
+## ffmpeg
+
+WORKDIR /tmp/ffmpeg
+RUN ./configure --extra-libs=-ldl --enable-gpl --enable-libass --enable-libfdk-aac --enable-libmp3lame --enable-libopus --enable-libtheora --enable-libvorbis --enable-libvpx --enable-libx264 --enable-nonfree
+RUN make -j`getconf _NPROCESSORS_ONLN`
+RUN make install
+RUN make distclean
+
