@@ -1,8 +1,9 @@
-FROM debian:jessie
+FROM phusion/baseimage:latest
 
 MAINTAINER Ozzy Johnson <ozzy.johnson@gmail.com>
  
 RUN apt-get -y update && apt-get install -y \
+    python-minimal \
     git-core \
     autoconf \
     automake \
