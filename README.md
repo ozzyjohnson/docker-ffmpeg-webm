@@ -6,7 +6,8 @@ A executable container I built for launching transcoders which consume IP camera
 
 Ideally, start by setting some same defaults in the top of ```record.sh``` to minimize the number of required command line options. Hopefully, ffmpeg will merge a time/date segmenter at some point and I can do away with some of the ugliness here.
 
-**record.sh**
+**record.sh - variables section**
+    ...
 
     # Some sane defaults for the environment.
     DATE=`date +%Y-%m-%d`
@@ -22,6 +23,8 @@ Ideally, start by setting some same defaults in the top of ```record.sh``` to mi
 
     # Duration of segments in seconds.
     SEGMENT_DURATION='900'
+
+    ...
 
 **With Defualts:**
 
@@ -53,7 +56,6 @@ Ideally, start by setting some same defaults in the top of ```record.sh``` to mi
 #### **Sources:**
 
  - Yasm: git://github.com/yasm/yasm.git 
- - fdk-aac: git://github.com/mstorsjo/fdk-aac.git 
  - x264: git://git.videolan.org/x264.git 
  - libvpx: https://chromium.googlesource.com/webm/libvpx.git 
  - ffmpeg: git://source.ffmpeg.org/ffmpeg.git 
