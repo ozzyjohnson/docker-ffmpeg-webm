@@ -22,8 +22,30 @@ RECORDING_RESOLUTION='720x576'
 # Path to to the camera stream.
 VIDEO_PATH='/stream1'
 
+# Help printer.
+
+function help {
+    echo "Usage: record.sh [OPTION]"
+    echo "Launch FFMPEG against the specified RTSP stream and tee the result"
+    echo "to disk | udp."
+    echo " "
+    echo "-u            camera username"
+    echo "-p            camera password"
+    echo "-i            camera IP address or hostname"
+    echo "-n            aamera name, used when creating an output"
+    echo "              directory"
+    echo "-s            duration of recorded segments in seconds."
+    echo "-d            top level destination directory. Recordings"
+    echo "              will be placed in a <name> subdirectory."
+    echo "-v            path to the camera RTSP stream. Typically"
+    echo "              /video, /stream, /h264 or similar."
+    echo "-r            recording resolution in the form '640x480'"
+    echo "-g            GOP size used when recording."
+    echo "-h            display this help and exit."
+}
+
 # Simple command line argument handling.
-while getopts ':u:p:i:n:s:d:v:r:g:' flag
+while getopts ':u:p:i:n:s:d:v:r:g:h' flag
     
 do
     case $flag in
@@ -36,6 +58,8 @@ do
         v) VIDEO_PATH=$OPTARG;;
         r) RECORDING_RESOLUTION=$OPTARG;;
         g) GOP_SIZE=$OPTARG;;
+        h) help; exit 0;;
+        \?) help; exit 2;;
     esac
 done
 
