@@ -7,6 +7,7 @@ A executable container I built for launching transcoders which consume IP camera
 Ideally, start by setting some same defaults in the top of ```record.sh``` to minimize the number of required command line options. Hopefully, ffmpeg will merge a time/date segmenter at some point and I can do away with some of the ugliness here.
 
 **record.sh - variables section**
+
     ...
 
     # Some sane defaults for the environment.
@@ -26,7 +27,7 @@ Ideally, start by setting some same defaults in the top of ```record.sh``` to mi
 
     ...
 
-**With Defualts:**
+**With Defaults:**
 
     docker run -it --rm -v /data:/mnt/data ffmpeg-webm
 
