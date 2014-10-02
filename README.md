@@ -1,16 +1,21 @@
 ## **ffmpeg-webm**
 
-A executable container I built for launching transcoders which consume IP camera streams and transcode to webm for storage and monitoring. This images includes a default mount ```/data``` for writing the resulting video out to disk. In my use case, path is attached via NFS mount to an archival server. 
+A executable container I built for launching transcoders which consume IP camera streams and transcode to webm for storage and monitoring. This images includes a default mount ```/data``` for writing the resulting video out to disk. In my use case, this path is attached via NFS mount to an archival server.
+
+I use this with a number of Cisco 5010 and 2500 IP cameras. However, it should work just fine with any number of other IP cameras given the right ```video_path```. If you don't know this information, try searching the manufacturer's docs for "RTSP URL" or "VLC"
 
 ### Usage:
 
+The script ```record.sh``` which is used as an ```ENTRYPOINT``` to this image is essential to the function of this image as built. You can see it along with the source Dockerfile over on GitHub.
+
+[ozzyjohnson / docker-ffmpeg-webm](https://github.com/ozzyjohnson/docker-ffmpeg-webm)
+
 Ideally, start by setting some same defaults in the top of ```record.sh``` to minimize the number of required command line options. Hopefully, ffmpeg will merge a time/date segmenter at some point and I can do away with some of the ugliness here.
 
-**record.sh - variables section**
+**record.sh - default variables section**
 
     ...
 
-    # Some sane defaults for the environment.
     DATE=`date +%Y-%m-%d`
     TIME=`date +%H-%M-%S`
     CAMERA_USER='user'
@@ -24,6 +29,15 @@ Ideally, start by setting some same defaults in the top of ```record.sh``` to mi
 
     # Duration of segments in seconds.
     SEGMENT_DURATION='900'
+
+    # Group of Pictures size.
+    GOP_SIZE='12'
+
+    # Output resolution.
+    RECORDING_RESOLUTION='720x576'
+
+    # Path to to the camera stream.
+    VIDEO_PATH='/stream1'
 
     ...
 
@@ -40,7 +54,9 @@ Ideally, start by setting some same defaults in the top of ```record.sh``` to mi
       -n camera_name \
       -s segment_duration \
       -d destination_dir \
-      -v video_path 
+      -v video_path \
+      -r recording_resolution \
+      -g gop_size  
 
 [Image on Docker Hub](https://registry.hub.docker.com/u/ozzyjohnson/ffmpeg-webm/)
 
@@ -65,3 +81,5 @@ Ideally, start by setting some same defaults in the top of ```record.sh``` to mi
 ### Next:
 
  - record.sh could use a whole host of additional options and some usage text.
+ - It looks like adding date/time functionality to ffmpeg could be a straightforward patch. I'll have to give it a try.
+ - record.sh is a quick, direct conversion of the upstart job I'd been using previously, is there a better way? 
