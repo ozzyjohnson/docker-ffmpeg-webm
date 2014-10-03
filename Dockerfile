@@ -28,7 +28,7 @@ RUN \
     texi2html \
     zlib1g-dev 
 
-
+# Prepare for cloning/building.
 WORKDIR /tmp
 
 ## Yasm
@@ -39,6 +39,7 @@ RUN git clone git://github.com/yasm/yasm.git && \
     make -j`getconf _NPROCESSORS_ONLN` && \
     make install && \
     make distclean && \
+    cd /tmp && \
     rm -rf /tmp/yasm
 
 ## x264
@@ -48,6 +49,7 @@ RUN git clone git://git.videolan.org/x264.git && \
     make -j`getconf _NPROCESSORS_ONLN` && \
     make install && \
     make distclean && \
+    cd /tmp && \
     rm -rf /tmp/x264
 
 ## libopus
@@ -58,6 +60,7 @@ RUN git clone git://git.opus-codec.org/opus.git && \
     make -j`getconf _NPROCESSORS_ONLN` && \
     make install && \
     make distclean && \
+    cd /tmp && \
     rm -rf /tmp/opus
 
 ## libvpx
@@ -67,6 +70,7 @@ RUN git clone https://chromium.googlesource.com/webm/libvpx && \
     make -j`getconf _NPROCESSORS_ONLN` && \
     make install && \
     make clean && \
+    cd /tmp && \
     rm -rf /tmp/libvpx
 
 ## ffmpeg
@@ -86,6 +90,7 @@ RUN git clone git://source.ffmpeg.org/ffmpeg.git && \
     make -j`getconf _NPROCESSORS_ONLN` && \
     make install && \
     make distclean && \
+    cd /tmp && \
     rm -rf /tmp/ffmpeg
 
 # Clean up packages.
@@ -101,4 +106,8 @@ ADD record.sh /record.sh
 # A volume for video output.
 VOLUME ["/data"]
 
+# Prepare to run.
+WORKDIR /data
+
+# Launch into the container executable style.
 ENTRYPOINT ["/bin/bash", "/record.sh"]
