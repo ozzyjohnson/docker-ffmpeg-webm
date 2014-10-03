@@ -26,8 +26,13 @@ RUN \
     pkg-config \
     python-minimal \
     texi2html \
-    zlib1g-dev 
+    zlib1g-dev && \
 
+# Clean up packages.
+  apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+#
 # Prepare for cloning/building.
 WORKDIR /tmp
 
@@ -92,10 +97,6 @@ RUN git clone git://source.ffmpeg.org/ffmpeg.git && \
     make distclean && \
     cd /tmp && \
     rm -rf /tmp/ffmpeg
-
-# Clean up packages.
-RUN apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
 
 # Access to second stream for consumption by ffserver or similar.
 EXPOSE 8888
