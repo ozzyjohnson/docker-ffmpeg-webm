@@ -28,59 +28,53 @@ RUN \
     texi2html \
     zlib1g-dev 
 
-# Clean up packages.
-RUN apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
-# CLONING:
 
 WORKDIR /tmp
-RUN git clone git://github.com/yasm/yasm.git
-RUN git clone git://git.videolan.org/x264.git
-RUN git clone https://chromium.googlesource.com/webm/libvpx
-RUN git clone git://source.ffmpeg.org/ffmpeg.git
-RUN git clone git://git.opus-codec.org/opus.git
-
-# COMPILING:
 
 ## Yasm
-
-WORKDIR /tmp/yasm
-RUN ./autogen.sh &&\
+RUN git clone git://github.com/yasm/yasm.git && \
+    cd yasm && \
+    ./autogen.sh &&\
     ./configure && \
     make -j`getconf _NPROCESSORS_ONLN` && \
     make install && \
-    make distclean
+    make distclean && \
+    rm -rf /tmp/yasm
 
 ## x264
-
-WORKDIR /tmp/x264
-RUN ./configure --enable-static --disable-opencl && \
+RUN git clone git://git.videolan.org/x264.git && \
+    cd x264 && \
+    ./configure --enable-static --disable-opencl && \
     make -j`getconf _NPROCESSORS_ONLN` && \
-    make install &&\
-    make distclean
+    make install && \
+    make distclean && \
+    rm -rf /tmp/x264
 
 ## libopus
-
-WORKDIR /tmp/opus
-RUN ./autogen.sh && \
+RUN git clone git://git.opus-codec.org/opus.git && \
+    cd opus && \
+    ./autogen.sh && \
     ./configure --disable-shared && \
     make -j`getconf _NPROCESSORS_ONLN` && \
     make install && \
-    make distclean
+    make distclean && \
+    rm -rf /tmp/opus
 
 ## libvpx
-
-WORKDIR /tmp/libvpx
-RUN ./configure --disable-shared && \
+RUN git clone https://chromium.googlesource.com/webm/libvpx && \
+    cd libvpx && \
+    ./configure --disable-shared && \
     make -j`getconf _NPROCESSORS_ONLN` && \
-    make install &&\
-    make clean
+    make install && \
+    make clean && \
+    rm -rf /tmp/libvpx
 
 ## ffmpeg
-
-WORKDIR /tmp/ffmpeg
-RUN ./configure \
+RUN git clone git://source.ffmpeg.org/ffmpeg.git && \
+    cd ffmpeg && \
+        ./configure \
+        --disable-debug \
+        --enable-small \
         --extra-libs=-ldl \
         --enable-gpl \
         --enable-libass \
@@ -91,7 +85,12 @@ RUN ./configure \
         --enable-libx264 && \
     make -j`getconf _NPROCESSORS_ONLN` && \
     make install && \
-    make distclean
+    make distclean && \
+    rm -rf /tmp/ffmpeg
+
+# Clean up packages.
+RUN apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # Access to second stream for consumption by ffserver or similar.
 EXPOSE 8888
