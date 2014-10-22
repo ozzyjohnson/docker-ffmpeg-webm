@@ -42,6 +42,7 @@ function help {
     echo "-r            recording resolution in the form '640x480'"
     echo "-g            GOP size used when recording."
     echo "-h            display this help and exit."
+    echo "-o            seconary output desination"
 }
 
 # Simple command line argument handling.
@@ -58,6 +59,7 @@ do
         v) VIDEO_PATH=$OPTARG;;
         r) RECORDING_RESOLUTION=$OPTARG;;
         g) GOP_SIZE=$OPTARG;;
+        o) SECONDARY_OUTPUT=$OPTARG;;
         h) help; exit 0;;
         \?) help; exit 2;;
     esac
@@ -78,5 +80,5 @@ ffmpeg -i rtsp://$CAMERA_USER:$CAMERA_PASS@$CAMERA_IP$VIDEO_PATH \
   -g $GOP_SIZE \
   -f tee \
   -s $RECORDING_RESOLUTION \
-  "[f=segment:segment_time=${SEGMENT_DURATION}:reset_timestamps=1]${DEST}${DATE}_${TIME}_%05d.webm | [f=mpegts]udp://0.0.0.0:8888"
+  "[f=segment:segment_time=${SEGMENT_DURATION}:reset_timestamps=1]${DEST}${DATE}_${TIME}_%05d.webm | [f=mpegts]udp://$SECONDARY_OUTPUT"
 
