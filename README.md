@@ -2,7 +2,7 @@
 
 A executable container I built for launching transcoders which consume IP camera streams and transcode to webm for storage and monitoring. This images includes a default mount ```/data``` for writing the resulting video out to disk. In my use case, this path is attached via NFS mount to an archival server.
 
-I use this with a number of Cisco 5010 and 2500 IP cameras. However, it should work just fine with any number of other IP cameras given the right ```video_path```. If you don't know this information, try searching the manufacturer's docs for "RTSP URL" or "VLC"
+I use this with a number of Cisco 5010, 2520, 2500 and Axis 3301 IP cameras. However, it should work just fine with any number of other IP cameras given the right ```video_path```. If you don't know this information, try searching the manufacturer's docs for "RTSP URL" or "VLC"
 
 ### Usage:
 
@@ -56,8 +56,9 @@ Ideally, start by setting some same defaults in the top of ```record.sh``` to mi
       -d destination_dir \
       -v video_path \
       -r recording_resolution \
-      -g gop_size  
-
+      -g gop_size \
+      -o secondary_output
+       
 [Image on Docker Hub](https://registry.hub.docker.com/u/ozzyjohnson/ffmpeg-webm/)
 
 ### FFMPEG Build Options:
