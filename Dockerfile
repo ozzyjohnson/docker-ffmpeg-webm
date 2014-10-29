@@ -105,7 +105,7 @@ EXPOSE 8888
 ADD record.sh /record.sh
 
 # A volume for video output.
-VOLUME ["/data"]
+ONBUILD VOLUME ["/data"]
 
 # Prepare to run.
 WORKDIR /data
