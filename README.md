@@ -81,6 +81,6 @@ Ideally, start by setting some same defaults in the top of ```record.sh``` to mi
 
 ### Next:
 
- - record.sh could use a whole host of additional options and some usage text.
  - It looks like adding date/time functionality to ffmpeg could be a straightforward patch. I'll have to give it a try.
  - record.sh is a quick, direct conversion of the upstart job I'd been using previously, is there a better way? 
+ - For my purposes, some built in camera templates would be nice, but I'm thinking I'll do this as a new image built from this rather than messing with the base.
