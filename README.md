@@ -2,15 +2,7 @@
 
 **Built:** 
 
-2014.11.16
-
-**Versions:**
-
-ffmpeg: N-67742-g3f07dd6
-opus: 1.1.1-beta-10-g8ab1968
-vpx: v1.3.0-4832-gc3a9056
-x264: 0.142.2491 24e4fed
-yasm: 1.3.0.6.g1962
+2014.12.07
 
 An executable container I built for launching transcoders which consume IP camera streams and transcode to webm for storage and monitoring. This images includes a default mount ```/data``` for writing the resulting video out to disk. In my use case, this path is attached via NFS mount to an archival server.
 
